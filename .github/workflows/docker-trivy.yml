@@ -1,0 +1,31 @@
+name: Docker + Trivy
+
+on: [push]
+
+jobs:
+  build-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Construire l'image Docker
+        run: docker build -t tp-devsecops:latest .
+
+      # 1) On REMONTE toutes les failles HIGH et CRITICAL (sans bloquer)
+      - name: Trivy - rapport HIGH et CRITICAL
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: tp-devsecops:latest
+          format: table
+          severity: HIGH,CRITICAL
+          exit-code: 0
+
+      # 2) On BLOQUE le pipeline UNIQUEMENT si une faille CRITICAL est presente
+      - name: Trivy - echec si CRITICAL
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: tp-devsecops:latest
+          format: table
+          severity: CRITICAL
+          exit-code: 1
