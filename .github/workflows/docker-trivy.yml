@@ -1,7 +1,8 @@
 name: Docker + Trivy
 
 on: [push]
-
+permissions:
+  contents: read
 jobs:
   build-and-scan:
     runs-on: ubuntu-latest
