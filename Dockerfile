@@ -1,5 +1,5 @@
 # Image de base VOLONTAIREMENT ancienne (Debian 10 "buster", fin de vie) - pour le TP
-FROM python:3.12-slim-bookworm
+FROM python:3.12-alpine
 WORKDIR /app
 
 COPY requirements.txt .
